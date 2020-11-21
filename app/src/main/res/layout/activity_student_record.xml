@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    tools:context=".StudentRecord">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/display_text"
+        android:text="Student Information"
+        android:gravity="center"
+        android:textSize="30dp"
+        android:textStyle="bold"
+        android:textColor="@color/colorBlack"
+        android:layout_marginTop="16dp"
+        />
+    <ImageView
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:id="@+id/studentImage"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/display_text"
+        android:padding="2dp"
+        android:src="@drawable/add_photo"
+        android:layout_marginTop="16dp"
+        />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/studentName"
+        android:layout_below="@id/studentImage"
+        android:hint="Enter Full Name"
+        android:inputType="textPersonName|textCapWords"
+        android:padding="10dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/background"
+        />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/regNumber"
+        android:layout_below="@id/studentName"
+        android:hint="Enter Registration Number"
+        android:inputType="number"
+        android:padding="10dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/background"
+        />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/pcSerialNumber"
+        android:layout_below="@id/regNumber"
+        android:hint="Enter Serial  Number"
+        android:padding="10dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/background"
+        />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/studentPhone"
+        android:layout_below="@id/pcSerialNumber"
+        android:hint="Enter Phone Number"
+        android:inputType="phone"
+        android:padding="10dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/background"
+
+        />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/addButton"
+        android:layout_below="@id/studentPhone"
+        android:layout_centerHorizontal="true"
+        android:text="Add Student Info"
+        android:textStyle="bold"
+        android:textColor="@color/colorBlack"
+        android:layout_marginTop="16dp"
+
+    />
+
+</RelativeLayout>
