@@ -2,11 +2,14 @@ package com.example.sqllitecrudeoperation;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.SyncStateContract;
 
 import androidx.annotation.Nullable;
+
+import java.util.ArrayList;
 
 public class DatabaseConnector extends SQLiteOpenHelper {
     public DatabaseConnector(@Nullable Context context) {
@@ -39,5 +42,32 @@ public class DatabaseConnector extends SQLiteOpenHelper {
         return id;
 
     }
-
+    // getAllData
+    public ArrayList<StudentData> getAllData(String orderBy){
+            ArrayList<StudentData> studentList = new ArrayList<>();
+            //query for selecting data in database
+        String selectQuery= "SELECT * FROM "+ Contants.TABLE_NAME + " ORDER BY " + orderBy;
+        SQLiteDatabase db= this.getWritableDatabase();
+        Cursor cursor=db.rawQuery(selectQuery,null);
+        /*
+        after getting all data
+         */
+        if (cursor.moveToNext()){
+            do {
+                StudentData studentData= new StudentData(
+                        ""+cursor.getInt(cursor.getColumnIndex(Contants.S_ID)),
+                        ""+cursor.getString(cursor.getColumnIndex(Contants.S_FULL_NAMES)),
+                        ""+cursor.getString(cursor.getColumnIndex(Contants.S_REGISTRATION_NUMBER)),
+                        ""+cursor.getString(cursor.getColumnIndex(Contants.S_PC_SERIAL_NUMBER)),
+                        ""+cursor.getString(cursor.getColumnIndex(Contants.S_IMAGE)),
+                        ""+cursor.getString(cursor.getColumnIndex(Contants.S_PHONE_NUMBER)),
+                        ""+cursor.getString(cursor.getColumnIndex(Contants.S_ADD_TIMESTAMP)),
+                        ""+cursor.getString(cursor.getColumnIndex(Contants.S_UPDATE_TIMESTAMP))
+                );
+                studentList.add(studentData);
+            }while (cursor.moveToNext());
+        }
+        db.close();
+        return studentList;
+  }
 }

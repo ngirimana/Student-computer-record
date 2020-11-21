@@ -105,7 +105,8 @@ public class StudentRecord extends AppCompatActivity {
                 ""+timeStamp
         ) ;
       
-        Toast.makeText(this, "New Student has been added Successfully", Toast.LENGTH_SHORT).show();
+ Toast.makeText(this, "New Student has been added Successfully", Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(StudentRecord.this,MainActivity.class));
     }
 
     private void imagePickDialog() {
