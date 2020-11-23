@@ -55,6 +55,13 @@ public class DatabaseConnector extends SQLiteOpenHelper {
        db.close();
        return ;
     }
+    //delete record
+    public void deleteStudentInfo(String id){
+        SQLiteDatabase db=getWritableDatabase();
+        db.delete(Contants.TABLE_NAME,Contants.S_ID+" = ? ", new String[]{id});
+        db.close();
+    }
+
     // getAllData
     public ArrayList<StudentData> getAllData(String orderBy){
             ArrayList<StudentData> studentList = new ArrayList<>();
