@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.provider.SyncStateContract;
 
 import androidx.annotation.Nullable;
 
@@ -40,7 +39,21 @@ public class DatabaseConnector extends SQLiteOpenHelper {
         long id=db.insert(Contants.TABLE_NAME,null,values);
         db.close();
         return id;
-
+    }
+    //update data
+    public void updateStudentInfo(String id, String name, String regNumber, String pcSerialNumber, String image, String phoneNumber, String AddTime, String updateTime){
+        SQLiteDatabase db=this.getWritableDatabase();
+        ContentValues values=new ContentValues();
+        values.put(Contants.S_FULL_NAMES,name);
+        values.put(Contants.S_REGISTRATION_NUMBER,regNumber);
+        values.put(Contants.S_PC_SERIAL_NUMBER,pcSerialNumber);
+        values.put(Contants.S_IMAGE,image);
+        values.put(Contants.S_PHONE_NUMBER,phoneNumber);
+        values.put(Contants.S_ADD_TIMESTAMP,AddTime);
+        values.put(Contants.S_UPDATE_TIMESTAMP,updateTime);
+       db.update(Contants.TABLE_NAME,values,Contants.S_ID+ " = ?",new String[]{id});
+       db.close();
+       return ;
     }
     // getAllData
     public ArrayList<StudentData> getAllData(String orderBy){

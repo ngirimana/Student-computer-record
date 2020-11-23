@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -31,7 +32,9 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent( MainActivity.this,StudentRecord.class));
+                Intent intent=new Intent(MainActivity.this,StudentRecord.class);
+                intent.putExtra("editMode",false);
+                startActivity(intent);
             }
         });
     }
@@ -45,5 +48,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         showStudentRecord();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode== event.KEYCODE_BACK){
+            moveTaskToBack(true);
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

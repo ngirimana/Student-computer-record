@@ -4,13 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
     android:padding="16dp"
-    tools:context=".StudentRecord">
+    tools:context=".EditStudentRecord">
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/display_text"
-        android:text=" Add Student Information"
+        android:text="Update Student Information"
         android:gravity="center"
         android:textSize="25dp"
         android:textStyle="bold"
@@ -78,11 +79,11 @@
         android:id="@+id/addButton"
         android:layout_below="@id/studentPhone"
         android:layout_centerHorizontal="true"
-        android:text="Add Student Info"
+        android:text="Update Student Info"
         android:textStyle="bold"
         android:textColor="@color/colorBlack"
         android:layout_marginTop="16dp"
 
-    />
+        />
 
 </RelativeLayout>
