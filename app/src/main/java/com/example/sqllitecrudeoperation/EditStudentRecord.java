@@ -8,17 +8,14 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,86 +25,141 @@ import android.widget.Toast;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
-public class StudentRecord extends AppCompatActivity {
+public class EditStudentRecord extends AppCompatActivity {
     private ImageView studentImg;
-    private EditText sName,sRegNumber,sPcSerialNumber,sPhone;
+    private EditText sName, sRegNumber, sPcSerialNumber, sPhone;
+    private boolean editMode= false;
     Button saveInfoBtn;
     ActionBar actionBar;
 
-    private static final int CAMERA_REQUEST_CODE=100;
-    private static final int STORAGE_REQUEST_CODE=101;
-    private static final int IMAGE_PICK_CAMERA_CODE=102;
-    private static final int IMAGE_PICK_GALLERY_CODE=103;
+    private static final int CAMERA_REQUEST_CODE = 100;
+    private static final int STORAGE_REQUEST_CODE = 101;
+    private static final int IMAGE_PICK_CAMERA_CODE = 102;
+    private static final int IMAGE_PICK_GALLERY_CODE = 103;
 
     private String[] cameraPermissions;
     private String[] storagePermissions;
 
     private Uri imageUri;
-    private String name,regNumber,serialNumber,phone,timeStamp;
+    private String id,name, regNumber, serialNumber, phone, addTimeStamp,UpdateTimeStamp;
     private DatabaseConnector dbHelper;
-
-    public StudentRecord() {
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_student_record);
+        setContentView(R.layout.activity_edit_student_record);
 
         actionBar = getSupportActionBar();
-        actionBar.setTitle("Add Student Info");
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        studentImg =findViewById(R.id.studentImage);
-        sName= findViewById(R.id.studentName);
-        sRegNumber=findViewById(R.id.regNumber);
-        sPcSerialNumber=findViewById(R.id.pcSerialNumber);
-        sPhone=findViewById(R.id.studentPhone);
+        studentImg = findViewById(R.id.studentImage);
+        sName = findViewById(R.id.studentName);
+        sRegNumber = findViewById(R.id.regNumber);
+        sPcSerialNumber = findViewById(R.id.pcSerialNumber);
+        sPhone = findViewById(R.id.studentPhone);
 
         saveInfoBtn = findViewById(R.id.addButton);
-        cameraPermissions = new String[]{Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE};
-        storagePermissions =new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        Intent intent=getIntent();
+
+        editMode= intent.getBooleanExtra("editMode",editMode);
+        id=intent.getStringExtra("ID");
+        name=intent.getStringExtra("NAME");
+        regNumber=intent.getStringExtra("REGNUM");
+        serialNumber=intent.getStringExtra("SERIAL_NUM");
+        imageUri= Uri.parse(intent.getStringExtra("IMAGE"));
+        phone=intent.getStringExtra("PHONE");
+        addTimeStamp=intent.getStringExtra("ADD_TIME");
+        UpdateTimeStamp=intent.getStringExtra("UPDATE_TIME");
+
+    if (editMode){
+        actionBar.setTitle("Update Information");
+
+        editMode= intent.getBooleanExtra("editMode",editMode);
+        id=intent.getStringExtra("ID");
+        name=intent.getStringExtra("NAME");
+        regNumber=intent.getStringExtra("REGNUM");
+        serialNumber=intent.getStringExtra("SERIAL_NUM");
+        imageUri= Uri.parse(intent.getStringExtra("IMAGE"));
+        phone=intent.getStringExtra("PHONE");
+        addTimeStamp=intent.getStringExtra("ADD_TIME");
+        UpdateTimeStamp=intent.getStringExtra("UPDATE_TIME");
+
+        sName.setText(name);
+        sRegNumber.setText(regNumber);
+        sPcSerialNumber.setText(serialNumber);
+        sPhone.setText(phone);
+        if (imageUri.toString().equals(null)){
+            studentImg.setImageResource(R.drawable.add_photo);
+        }
+        else {
+            studentImg.setImageURI(imageUri);
+        }
+
+    }
+    else {
+        actionBar.setTitle("Add Student Information");
+    }
+
+        cameraPermissions = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        storagePermissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
          /*
          initiate database connection in main function
           */
-        dbHelper= new DatabaseConnector(this);
-        studentImg.setOnClickListener(new View.OnClickListener(){
+        dbHelper = new DatabaseConnector(this);
+        studentImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 imagePickDialog();
             }
         });
 
-        saveInfoBtn.setOnClickListener(new View.OnClickListener(){
+        saveInfoBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-             // when click on save button, insert data in database
+                // when click on save button, insert data in database
                 getData();
-                startActivity(new Intent(StudentRecord.this,MainActivity.class));
-                Toast.makeText(StudentRecord.this,"Added Successfully",Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(EditStudentRecord.this,MainActivity.class));
+                Toast.makeText(EditStudentRecord.this,"Update Successfully",Toast.LENGTH_SHORT).show();
+
             }
         });
     }
 
     private void getData() {
-        name= ""+sName.getText().toString();
-        regNumber=""+sRegNumber.getText().toString();
-        serialNumber=""+sPcSerialNumber.getText().toString();
-        phone=""+sPhone.getText().toString();
-        timeStamp=""+System.currentTimeMillis();
+        name = "" + sName.getText().toString();
+        regNumber = "" + sRegNumber.getText().toString();
+        serialNumber = "" + sPcSerialNumber.getText().toString();
+        phone = "" + sPhone.getText().toString();
+        if (editMode) {
+            String newUpdateTime = "" + System.currentTimeMillis();
+            dbHelper.updateStudentInfo(
+                    "" + id,
+                    "" + name,
+                    "" + regNumber,
+                    "" + serialNumber,
+                    "" + imageUri,
+                    "" + phone,
+                    "" + addTimeStamp,
+                    "" + newUpdateTime
+            );
+        } else {
+            String timeStamp = "" + System.currentTimeMillis();
 
-        dbHelper.insertStudentInfo(
-                ""+name,
-                ""+regNumber,
-                ""+serialNumber,
-                ""+imageUri,
-                ""+phone,
-                ""+timeStamp,
-                ""+timeStamp
-        ) ;
+            dbHelper.insertStudentInfo(
+                    "" + name,
+                    "" + regNumber,
+                    "" + serialNumber,
+                    "" + imageUri,
+                    "" + phone,
+                    "" + timeStamp,
+                    "" + timeStamp
+            );
+
+            Toast.makeText(this, "New Student has been added Successfully", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(EditStudentRecord.this, MainActivity.class));
+        }
     }
-
     private void imagePickDialog() {
         String[] options={"Camera","Gallery"};
         AlertDialog.Builder builder =new AlertDialog.Builder(this);
@@ -134,13 +186,13 @@ public class StudentRecord extends AppCompatActivity {
                         PickFromStorage();
                     }
                 }
-             }
+            }
         });
-        builder.create().show();  
-    }                             
-/*
-    Getting image from gallery
- */
+        builder.create().show();
+    }
+    /*
+        Getting image from gallery
+     */
     private void PickFromStorage() {
         Intent galleryIntent=new Intent(Intent.ACTION_PICK);
         galleryIntent.setType("image/*");
@@ -192,14 +244,14 @@ public class StudentRecord extends AppCompatActivity {
         switch (requestCode){
             case CAMERA_REQUEST_CODE:{
                 if(grantResults.length>0){
-                boolean cameraAccepted=grantResults[0]==PackageManager.PERMISSION_GRANTED;
-                boolean storageAccepted=grantResults[1]== PackageManager.PERMISSION_GRANTED;
-                if (cameraAccepted && storageAccepted){
-                    pickFromCamera();
-                }
-                else{
-                    Toast.makeText(this, "Camera permission denied!",Toast.LENGTH_SHORT).show();
-                }
+                    boolean cameraAccepted=grantResults[0]==PackageManager.PERMISSION_GRANTED;
+                    boolean storageAccepted=grantResults[1]== PackageManager.PERMISSION_GRANTED;
+                    if (cameraAccepted && storageAccepted){
+                        pickFromCamera();
+                    }
+                    else{
+                        Toast.makeText(this, "Camera permission denied!",Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
             break;
@@ -210,12 +262,12 @@ public class StudentRecord extends AppCompatActivity {
                         PickFromStorage();
                     }
                     else{
-                            Toast.makeText(this, "Storage permission denied!",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Storage permission denied!",Toast.LENGTH_SHORT).show();
                     }}
             }
-            }
-
         }
+
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -230,7 +282,7 @@ public class StudentRecord extends AppCompatActivity {
             else if(requestCode == IMAGE_PICK_CAMERA_CODE){
                 CropImage.activity(imageUri).setGuidelines(CropImageView.Guidelines.ON).
                         setAspectRatio(1,1).start(this);
-                
+
             }
             else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE){
                 CropImage.ActivityResult result = CropImage.getActivityResult(data);
