@@ -265,8 +265,4 @@ public class StudentRecord extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    public boolean onSupportNavigationUp(){
-        onBackPressed();
-        return super.onSupportNavigateUp();
-    }
 }
