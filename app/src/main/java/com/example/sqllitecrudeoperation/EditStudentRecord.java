@@ -118,10 +118,23 @@ public class EditStudentRecord extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // when click on save button, insert data in database
-                getData();
-                startActivity(new Intent(EditStudentRecord.this,MainActivity.class));
-                Toast.makeText(EditStudentRecord.this,"Update Successfully",Toast.LENGTH_SHORT).show();
-
+                if (sName.getText().toString().equals("")){
+                    sName.setError("Names are required!");
+                }
+                else if (sRegNumber.getText().toString().equals("")){
+                    sRegNumber.setError("Registration number is required!");
+                }
+                else if (sPcSerialNumber.getText().toString().equals("")){
+                    sPcSerialNumber.setError("Serial number is required!");
+                }
+                else if (sPhone.getText().toString().equals("")){
+                    sPhone.setError("Phone number are required!");
+                }
+                else {
+                    getData();
+                    startActivity(new Intent(EditStudentRecord.this, MainActivity.class));
+                    Toast.makeText(EditStudentRecord.this, "Update Successfully", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

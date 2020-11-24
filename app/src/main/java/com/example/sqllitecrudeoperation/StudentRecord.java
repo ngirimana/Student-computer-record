@@ -83,9 +83,23 @@ public class StudentRecord extends AppCompatActivity {
             @Override
             public void onClick(View v) {
              // when click on save button, insert data in database
-                getData();
-                startActivity(new Intent(StudentRecord.this,MainActivity.class));
-                Toast.makeText(StudentRecord.this,"Added Successfully",Toast.LENGTH_SHORT).show();
+                if (sName.getText().toString().equals("")){
+                    sName.setError("Names are required!");
+                }
+                else if (sRegNumber.getText().toString().equals("")){
+                    sRegNumber.setError("Registration number is required!");
+                }
+                else if (sPcSerialNumber.getText().toString().equals("")){
+                    sPcSerialNumber.setError("Serial number is required!");
+                }
+                else if (sPhone.getText().toString().equals("")){
+                    sPhone.setError("Phone number are required!");
+                }
+                else {
+                    getData();
+                    startActivity(new Intent(StudentRecord.this, MainActivity.class));
+                    Toast.makeText(StudentRecord.this, "Added Successfully", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -97,6 +111,7 @@ public class StudentRecord extends AppCompatActivity {
         phone=""+sPhone.getText().toString();
         timeStamp=""+System.currentTimeMillis();
 
+
         dbHelper.insertStudentInfo(
                 ""+name,
                 ""+regNumber,
@@ -105,8 +120,9 @@ public class StudentRecord extends AppCompatActivity {
                 ""+phone,
                 ""+timeStamp,
                 ""+timeStamp
-        ) ;
+        );
     }
+
 
     private void imagePickDialog() {
         String[] options={"Camera","Gallery"};
@@ -249,8 +265,4 @@ public class StudentRecord extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    public boolean onSupportNavigationUp(){
-        onBackPressed();
-        return super.onSupportNavigateUp();
-    }
 }

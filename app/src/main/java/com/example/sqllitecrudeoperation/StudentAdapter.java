@@ -11,20 +11,23 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.Holder> {
     Context context;
     List<StudentData> studentList = null;
+    DatabaseConnector db;
 
     public StudentAdapter(Context context, List<StudentData> studentList) {
         this.context = context;
         this.studentList = studentList;
+        // to initialize db
+        db =new DatabaseConnector(context);
     }
 
     @NonNull
@@ -67,8 +70,40 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.Holder> 
                 );
             }
         });
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteDialog(
+                        ""+id
 
+                );
 
+            }
+        });
+
+    }
+
+    private void deleteDialog(final String id) {
+        AlertDialog.Builder builder=new AlertDialog.Builder(context);
+        builder.setTitle("Delete");
+        builder.setMessage("Do you want to delete this record?");
+        builder.setCancelable(false);
+        builder.setIcon(R.drawable.delete_icon);
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                db.deleteStudentInfo(id);
+                ((MainActivity)context).onResume();
+                Toast.makeText(context, "Record deleted Successfully", Toast.LENGTH_SHORT).show();
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        builder.create().show();
     }
 
     @Override

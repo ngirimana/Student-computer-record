@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         actionBar =getSupportActionBar() ;
+
         actionBar.setTitle("All Student Information");
 
         mRecyclerView=findViewById(R.id.recyclerView1);
@@ -48,6 +49,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         showStudentRecord();
+    }
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 
     @Override
