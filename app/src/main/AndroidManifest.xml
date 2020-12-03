@@ -12,7 +12,7 @@
         android:roundIcon="@drawable/launcher_icon"
         android:supportsRtl="true"
         android:theme="@style/Theme.SqlLiteCrudeOperation">
-        <activity android:name=".EditStudentRecord"></activity>
+        <activity android:name=".EditStudentRecord" />
         <activity android:name=".StudentRecord" />
         <activity android:name=".MainActivity">
             <intent-filter>
